@@ -1,5 +1,5 @@
 process AGGREGATE {
-    tag "${pheno}:${category}"
+    tag "${pheno}:${key}:${category}"
 
     label 'simple'
 
@@ -8,16 +8,17 @@ process AGGREGATE {
     publishDir("${params.output_dir}/aggregate", mode: 'copy')
 
     input:
-    tuple val(pheno), val(category), path(annotations), 
-          val(rlist), path(rlist_file), path(rlist_log)
+    tuple val(pheno), val(key), val(category),
+          val(rlist), path(rlist_file), path(rlist_log),
+          val(variable), path(annotations)
 
     output:
-    tuple val(pheno), val(category), 
-          path("${pheno}.${category}.aggregate.tsv")
+    tuple val(pheno), val(key), val(category), val("aggregate"),
+          path("${pheno}.${key}.${category}.aggregate.tsv")
  
     script:
     """
     #!/bin/bash
-	aggregate_genotyeps.R ${annotations} ${rlist_file} ${pheno}.${category}.aggregate.tsv
+	aggregate_genotyeps.R ${annotations} ${rlist_file} ${pheno}.${key}.${category}.aggregate.tsv
     """
 }

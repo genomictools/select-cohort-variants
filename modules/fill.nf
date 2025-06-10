@@ -1,5 +1,5 @@
 process FILL {
-    tag "${pheno}:${chrom}"
+    tag "${pheno}:${key}"
 
     label 'simple'
 
@@ -8,23 +8,29 @@ process FILL {
     publishDir("${params.output_dir}/filled", mode: 'symlink')
 
     input:
-    tuple val(pheno), val(chrom),
-          path(file), path(index)
+    tuple val(pheno), path(file), path(index), val(n_vars),
+          val(key), path(coordinates)
 
     output:
-    tuple val(pheno), val(chrom),
-          path("${pheno}.${chrom}.filled.vcf.gz"),
-          path("${pheno}.${chrom}.filled.vcf.gz.tbi")
+    tuple val(pheno),
+          path("${pheno}.${key}.filled.vcf.gz"),
+          path("${pheno}.${key}.filled.vcf.gz.tbi"),
+		  env(n_vars),
+          val(key), path(coordinates)
 
     script:
     """
     #!/bin/bash
-    # Subset pheno
-    bcftools view ${file} | \
+    # Fill in genotypes
+    bcftools view -R ${coordinates} ${file} | \
     bcftools +setGT -- -t q -n 0 -i 'FMT/GQ < ${params.GQ} | FMT/DP < ${params.DP} | VAF < ${params.VAF}' | \
     bcftools +fill-tags -- -t all | \
-    bcftools view -g het --threads ${task.cpu} -Oz -o ${pheno}.${chrom}.filled.vcf.gz
+    bcftools view -g het --threads ${task.cpu} -Oz -o ${pheno}.${key}.filled.vcf.gz
 
-    tabix ${pheno}.${chrom}.filled.vcf.gz
+	# Index the filled VCF
+    tabix ${pheno}.${key}.filled.vcf.gz
+
+    # Count the number of variants
+    n_vars=\$(bcftools index -n ${pheno}.${key}.filled.vcf.gz)
     """
 }

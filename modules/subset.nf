@@ -15,7 +15,8 @@ process SUBSET {
     output:
     tuple val(pheno), val(chrom),
           path("${pheno}.${chrom}.vcf.gz"),
-          path("${pheno}.${chrom}.vcf.gz.tbi")
+          path("${pheno}.${chrom}.vcf.gz.tbi"),
+          env(n_vars)
 
     script:
     """
@@ -32,6 +33,10 @@ process SUBSET {
     bcftools +fill-tags -- -t all | \
     bcftools view -g het --threads ${task.cpus} -Oz -o ${pheno}.${chrom}.vcf.gz
 
+    # Index the VCF
     tabix ${pheno}.${chrom}.vcf.gz
+
+    # Count the number of variants
+    n_vars=\$(bcftools index -n ${pheno}.${chrom}.vcf.gz)
     """
 }
