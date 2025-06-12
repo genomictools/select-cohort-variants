@@ -13,6 +13,9 @@ workflow get_coordinates {
     main:
     COORDINATES(coords, genome, style)
         | transpose
+        | set { bed }
+    
+    bed
         | collectFile { it -> [ "${it.first()}.bed", it.last() ] } 
         | map { [ it.simpleName, it ] }
         | splitText(
@@ -23,7 +26,7 @@ workflow get_coordinates {
         | set { chunks }
 
     emit:
-    bed    = COORDINATES.out
+    bed    = bed
     chunks = chunks
 }
 
