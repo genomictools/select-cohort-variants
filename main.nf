@@ -13,11 +13,10 @@ cohorts_ch = Channel.fromPath(params.cohorts)
     | splitCsv(header: true, sep: ',')
     | map { row -> [
         row.cohort,
-        row.chrom ?: (1..22).collect { "chr$it" } + ['chrX', 'chrY'],
         file(row.file), file(row.index),
         file(row.samples)
     ] }
-    | transpose
+    | unique
 
 genes_coords_ch = Channel.fromPath(params.cohorts)
     | splitCsv(header: true, sep: ',')
@@ -37,8 +36,8 @@ variable_ch = Channel.of( 'rlist', 'snplist', 'frqx' )
 // Run the main workflow
 workflow  {
     coordinates = get_coordinates( genes_coords_ch, params.genome, params.style )
-    // cohorts = get_cohort( cohorts_ch, coordinates.bed )
-    // variants = select_variants( cohorts.variants, coordinates.chunks )
+    cohorts = get_cohort( cohorts_ch, coordinates.bed )
+    variants = select_variants( cohorts.variants, coordinates.chunks )
     // summary = summarize_genes( variants.genotypes, variants.annotations )
 
     // summary

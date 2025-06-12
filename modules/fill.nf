@@ -5,32 +5,33 @@ process FILL {
 
     container params.bcftools
 
-    publishDir("${params.output_dir}/filled", mode: 'symlink')
+    publishDir("${params.output_dir}/filled", mode: 'copy')
 
     input:
-    tuple val(pheno), path(file), path(index), val(n_vars),
-          val(key), path(coordinates)
+    tuple val(cohort), val(key),
+          path(file), path(index),
+          val(n_samples), val(n_variants)
 
     output:
-    tuple val(pheno),
-          path("${pheno}.${key}.filled.vcf.gz"),
-          path("${pheno}.${key}.filled.vcf.gz.tbi"),
-		  env(n_vars),
-          val(key), path(coordinates)
+    tuple val(cohort), val(key),
+          path("${cohort}.${key}.filled.vcf.gz"),
+          path("${cohort}.${key}.filled.vcf.gz.tbi"),
+          env(n_samples), env(n_variants)
 
     script:
     """
     #!/bin/bash
     # Fill in genotypes
-    bcftools view -R ${coordinates} ${file} | \
+    bcftools view ${file} | \
     bcftools +setGT -- -t q -n 0 -i 'FMT/GQ < ${params.GQ} | FMT/DP < ${params.DP} | VAF < ${params.VAF}' | \
     bcftools +fill-tags -- -t all | \
-    bcftools view -g het --threads ${task.cpu} -Oz -o ${pheno}.${key}.filled.vcf.gz
+    bcftools view -g het --threads ${task.cpus} -Oz -o ${cohort}.${key}.filled.vcf.gz
 
 	# Index the filled VCF
-    tabix ${pheno}.${key}.filled.vcf.gz
+    tabix ${cohort}.${key}.filled.vcf.gz
 
-    # Count the number of variants
-    n_vars=\$(bcftools index -n ${pheno}.${key}.filled.vcf.gz)
+    # Count the number of samples and variants
+    n_samples=\$(bcftools  query -l ${cohort}.${key}.filled.vcf.gz | wc -l)
+    n_variants=\$(bcftools index -n ${cohort}.${key}.filled.vcf.gz)
     """
 }

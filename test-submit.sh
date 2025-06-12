@@ -18,7 +18,6 @@ cd test/
 # wget -c $URL/50385591 -O input/pheno.cases.txt
 
 echo "cohort,chrom,start,end,file,index,samples" > input/cohorts_input.csv
-echo "pheno1,chr1,,,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.cases.txt" >> input/cohorts_input.csv
 echo "pheno1,,,,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.cases.txt" >> input/cohorts_input.csv
 echo "pheno2,chr2,,,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.cases.txt" >> input/cohorts_input.csv
 echo "pheno3,chr3,,,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.cases.txt" >> input/cohorts_input.csv

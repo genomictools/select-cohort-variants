@@ -2,6 +2,7 @@
 
 nextflow.enable.dsl=2
 
+include { SPLIT }       from '../modules/split.nf'
 include { FILL }        from '../modules/fill.nf'
 include { FILTER }      from '../modules/filter.nf'
 
@@ -15,7 +16,9 @@ workflow select_variants {
     main:
     variants
         | combine(chunks, by: 0)
+        | SPLIT
         | ( params.fill ? FILL : map {it} )
+        | filter { it.last().toInteger() > 0 }
         | combine(category_ch)
         | FILTER
         | filter { it.last().toInteger() > 0 }
@@ -31,13 +34,13 @@ workflow select_variants {
 }
 
 workflow  {
-    variants_ch = Channel.fromPath(params.cohorts)
+    variants_ch = Channel.fromPath(params.variants)
         | splitCsv(header: true, sep: ',')
-        | map { row -> [ row.cohort, row.file, row.index, row.n_vars ] }
+        | map { row -> [ row.cohort, row.file, row.index, row.n_samples, row.n_variants ] }
 
-    chunks_ch = Channel.fromPath(params.cohorts)
+    chunks_ch = Channel.fromPath(params.chunks)
         | splitCsv(header: true, sep: ',')
-        | map { row -> [ row.cohort, row.chrom, row.file ] }
+        | map { row -> [ row.cohort, row.key, row.file ] }
 
     select_variants( variants_ch, chunks_ch )
 }

@@ -1,5 +1,5 @@
 process FILTER {
-    tag "${pheno}:${key}:${category}"
+    tag "${cohort}:${key}:${category}"
 
     label 'simple'
 
@@ -8,16 +8,17 @@ process FILTER {
     publishDir("${params.output_dir}/filtered/", mode: 'copy')
 
     input:
-    tuple val(pheno), path(file), path(index), val(n_vars),
-          val(key), path(coordinates),
+    tuple val(cohort), val(key),
+          path(file), path(index),
+          val(n_samples), val(n_variants),
           val(category)
 
     output:
-    tuple val(pheno), val(key), val(category),
-          path("${pheno}.${key}.${category}.vcf.gz"),
-          path("${pheno}.${key}.${category}.vcf.gz.tbi"),
-          path("${pheno}.${key}.${category}.annotations.tsv"),
-          env(n_vars)
+    tuple val(cohort), val(key), val(category),
+          path("${cohort}.${key}.${category}.vcf.gz"),
+          path("${cohort}.${key}.${category}.vcf.gz.tbi"),
+          path("${cohort}.${key}.${category}.annotations.tsv"),
+          val(n_samples), val(n_variants)
         
     script:
     """
@@ -34,21 +35,22 @@ process FILTER {
     elif [ ${category} == 'Splicing' ];   then bcftools +split-vep -s worst -c SpliceAI_pred_DS_AG:Float,SpliceAI_pred_DS_AL:Float,SpliceAI_pred_DS_DG:Float,SpliceAI_pred_DS_DL:Float -i "SpliceAI_pred_DS_AG > ${params.DS} || SpliceAI_pred_DS_AL > ${params.DS} || SpliceAI_pred_DS_DG > ${params.DS} || SpliceAI_pred_DS_DL > ${params.DS}";
     else exit "Category: ${category} is not recognized"; fi | \
     bcftools annotate --set-id '%CHROM:%POS:%REF:%ALT' | \
-    bcftools view --threads ${task.cpus} -Oz -o ${pheno}.${key}.${category}.vcf.gz
+    bcftools view --threads ${task.cpus} -Oz -o ${cohort}.${key}.${category}.vcf.gz
 
     # Index the VCF
-    tabix ${pheno}.${key}.${category}.vcf.gz
+    tabix ${cohort}.${key}.${category}.vcf.gz
 
-	# Extract annotations
+    # Extract annotations
 	bcftools +split-vep \
 		-s worst \
 		-c Gene \
 		-f '%CHROM:%POS:%REF:%ALT\t%Gene\t%CSQ\n' \
 		-d -A tab \
-		${pheno}.${key}.${category}.vcf.gz \
-		> ${pheno}.${key}.${category}.annotations.tsv
+		${cohort}.${key}.${category}.vcf.gz \
+		> ${cohort}.${key}.${category}.annotations.tsv
 
-    # Count the number of variants
-    n_vars=\$(bcftools index -n ${pheno}.${key}.${category}.vcf.gz)
+    # Count the number of samples and variants
+    n_samples=\$(bcftools  query -l ${cohort}.${key}.${category}.vcf.gz | wc -l)
+    n_variants=\$(bcftools index -n ${cohort}.${key}.${category}.vcf.gz)
     """
 }

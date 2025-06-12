@@ -11,16 +11,17 @@ workflow get_cohort {
     bed
 
     main:
-    bed
-        | transpose
-        | combine(cohorts, by: [0,1])
-        | SUBSET
+    cohorts
+        | combine(bed, by: 0)
+        | SUBSET        
         | filter { it.last().toInteger() > 0 }
-        | groupTuple(by: [0,2])
+        | groupTuple(by: 0)
         | COMBINE
+        | filter { it.last().toInteger() > 0 }
+        | set { variants}
 
     emit:
-    variants = COMBINE.out
+    variants
 }
 
 workflow  {
