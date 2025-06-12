@@ -1,5 +1,5 @@
 process COORDINATES {
-    tag "${chrom}"
+    tag "${key}:${genome}:${style}"
 
     label 'simple'
 
@@ -8,16 +8,16 @@ process COORDINATES {
     publishDir("${params.output_dir}/coordiantes", mode: 'copy')
 
     input:
-    tuple val(cohort), val(chrom)
+    tuple val(cohort), val(key), val(chrom), val(start), val(end)
     val(genome)
     val(style)
 
     output:
-    tuple val(cohort), val(chrom), path("${chrom}.bed")
- 
+    tuple val(cohort), val("${key}"), path("${key}.bed")
+
     script:
     """
     #!/bin/bash
-    generate_coordinates.R ${genome} ${style} ${chrom} ${params.coding} ${chrom}.bed
+    generate_coordinates.R ${chrom} ${start} ${end} ${genome} ${style} ${params.coding} ${key}.bed
     """
 }

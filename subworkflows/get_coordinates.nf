@@ -30,9 +30,15 @@ workflow get_coordinates {
 workflow  {
     genes_coords_ch = Channel.fromPath(params.cohorts)
         | splitCsv(header: true, sep: ',')
-        | map { row -> [ row.cohort, row.chrom ] }
+        | map { row -> [ cohort: row.cohort, chrom: row.chrom, start: row.start, end: row.end ] }
+        | map { it -> 
+            chrom = it.chrom ?: (1..2).collect { "chr$it" } + ['chrX', 'chrY']
+            key   = (it.start && it.end) ? "${chrom}:${it.start}-${it.end}" : chrom
+            [ it.cohort, key, chrom, it.start ?: null, it.end ?: null]
+        }
         | transpose
-        | groupTuple(by: [1,2,3])
+        | unique
+        | groupTuple(by: [1,2,3,4])
     
-    get_coordinates( genes_coords, params.genome, params.style )
+    get_coordinates( genes_coords_ch, params.genome, params.style )
 }
