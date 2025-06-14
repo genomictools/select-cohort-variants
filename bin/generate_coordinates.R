@@ -9,7 +9,8 @@ end     <- args[3]
 genome  <- args[4]
 style   <- args[5]
 coding  <- args[6]
-output  <- args[7]
+chunk   <- args[7]
+output  <- args[8]
 
 # load genes
 if (genome == 'hg38') txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene::TxDb.Hsapiens.UCSC.hg38.knownGene
@@ -35,7 +36,7 @@ if ( coding == 'true' ) {
   )
   gene_coordinates <- IRanges::subsetByOverlaps(gene_coordinates, q)
 } else if ( coding == 'false' ) {
-  gene_coordinates <- q
+  gene_coordinates <- GenomicRanges::tile(q, width = as.integer(chunk))
 } else {
   stop("coding can be 'true' or 'false'.")
 }

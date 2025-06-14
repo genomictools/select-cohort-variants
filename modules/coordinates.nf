@@ -18,6 +18,6 @@ process COORDINATES {
     script:
     """
     #!/bin/bash
-    generate_coordinates.R ${chrom} ${start} ${end} ${genome} ${style} ${params.coding} ${key}.bed
+    generate_coordinates.R ${chrom} ${start} ${end} ${genome} ${style} ${params.coding} ${params.chunk} ${key}.bed
     """
 }
