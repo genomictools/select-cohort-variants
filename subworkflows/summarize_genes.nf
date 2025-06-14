@@ -37,5 +37,5 @@ workflow  {
     annotations_ch = Channel.fromPath(params.annotations)
         | map { row -> [ row.cohort, row.key, row.category, row.variable, row.file ] }
 
-    summarize_genes( genotypes, annotations )
+    summarize_genes( genotypes_ch, annotations_ch )
 }

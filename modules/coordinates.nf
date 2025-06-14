@@ -2,8 +2,7 @@ process COORDINATES {
     tag "${key}:${genome}:${style}"
 
     label 'simple'
-
-    container params.bioconductor
+    label 'bioconductor'
 
     publishDir("${params.output_dir}/coordiantes", mode: 'copy')
 

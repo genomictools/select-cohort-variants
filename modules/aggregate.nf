@@ -1,24 +1,23 @@
 process AGGREGATE {
-    tag "${pheno}:${key}:${category}"
+    tag "${cohort}:${key}:${category}"
 
     label 'simple'
-
-    container params.rocker
+    label 'rocker'
 
     publishDir("${params.output_dir}/aggregate", mode: 'copy')
 
     input:
-    tuple val(pheno), val(key), val(category),
+    tuple val(cohort), val(key), val(category),
           val(rlist), path(rlist_file), path(rlist_log),
           val(variable), path(annotations)
 
     output:
-    tuple val(pheno), val(key), val(category), val("aggregate"),
-          path("${pheno}.${key}.${category}.aggregate.tsv")
+    tuple val(cohort), val(key), val(category), val("aggregate"),
+          path("${cohort}.${key}.${category}.aggregate.tsv")
  
     script:
     """
     #!/bin/bash
-	aggregate_genotyeps.R ${annotations} ${rlist_file} ${pheno}.${key}.${category}.aggregate.tsv
+	aggregate_genotyeps.R ${annotations} ${rlist_file} ${cohort}.${key}.${category}.aggregate.tsv
     """
 }

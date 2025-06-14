@@ -2,8 +2,7 @@ process COMBINE {
     tag "${cohort}"
 
     label 'simple'
-
-    container params.bcftools
+    label 'bcftools'
 
     publishDir("${params.output_dir}/combined/", mode: 'copy')
 

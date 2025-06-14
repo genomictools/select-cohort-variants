@@ -27,11 +27,24 @@ workflow get_cohort {
 workflow  {
     cohorts_ch = Channel.fromPath(params.cohorts)
         | splitCsv(header: true, sep: ',')
-        | map { row -> [ row.cohort, row.chrom, file(row.file), file(row.index), file(row.samples)] }
-
-    coordinates_ch = Channel.fromPath(params.cohorts)
+        | map { row -> [
+            row.cohort,
+            file(row.file), file(row.index),
+            file(row.samples)
+        ] }
+        | unique
+        
+    coords_ch = Channel.fromPath(params.cohorts)
         | splitCsv(header: true, sep: ',')
-        | map { row -> [ row.cohort, row.chrom, row.file ] }
+        | map { row -> [ cohort: row.cohort, chrom: row.chrom, start: row.start, end: row.end ] }
+        | map { it -> 
+            chrom = it.chrom ?: (1..2).collect { "chr$it" } + ['chrX', 'chrY']
+            key   = (it.start && it.end) ? "${chrom}:${it.start}-${it.end}" : chrom
+            [ it.cohort, key, chrom, it.start ?: null, it.end ?: null]
+        }
+        | transpose
+        | unique
+        | groupTuple(by: [1,2,3,4])
 
-    get_cohort( cohorts, coordinates_ch )
+    get_cohort( cohorts_ch, coords_ch )
 }

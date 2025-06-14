@@ -2,8 +2,7 @@ process SUBSET {
     tag "${cohort}:${key}"
 
     label 'simple'
-
-    container params.bcftools
+	label 'bcftools'
 
     publishDir("${params.output_dir}/subsets", mode: 'copy')
 

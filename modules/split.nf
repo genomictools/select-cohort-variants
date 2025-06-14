@@ -2,8 +2,7 @@ process SPLIT {
     tag "${cohort}:${key}"
 
     label 'simple'
-
-    container params.bcftools
+	label 'bcftools'
 
     publishDir("${params.output_dir}/split", mode: 'copy')
 
