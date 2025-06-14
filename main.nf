@@ -38,12 +38,12 @@ workflow  {
     coordinates = get_coordinates( genes_coords_ch, params.genome, params.style )
     cohorts = get_cohort( cohorts_ch, coordinates.bed )
     variants = select_variants( cohorts.variants, coordinates.chunks )
-    // summary = summarize_genes( variants.genotypes, variants.annotations )
+    summary = summarize_genes( variants.genotypes, variants.annotations )
 
-    // summary
-    //     | collectFile (
-    //         keepHeader: true,
-    //         storeDir: "${params.output_dir}/summary",
-    //     )
-    //     { it -> [ "${it[0]}.${it[2]}.${it[3]}.tsv", it[4] ] }
+    summary
+        | collectFile (
+            keepHeader: true,
+            storeDir: "${params.output_dir}/summary",
+        )
+        { it -> [ "${it[0]}.${it[2]}.${it[3]}.tsv", it[4] ] }
 }
