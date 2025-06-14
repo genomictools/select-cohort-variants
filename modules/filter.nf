@@ -18,7 +18,7 @@ process FILTER {
           path("${cohort}.${key}.${category}.vcf.gz"),
           path("${cohort}.${key}.${category}.vcf.gz.tbi"),
           path("${cohort}.${key}.${category}.annotations.tsv"),
-          val(n_samples), val(n_variants)
+          env(n_samples), env(n_variants)
         
     script:
     """

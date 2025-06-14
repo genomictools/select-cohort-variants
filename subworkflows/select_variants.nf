@@ -23,7 +23,7 @@ workflow select_variants {
         | FILTER
         | filter { it.last().toInteger() > 0 }
         | multiMap {
-            genotypes   : [ it[0], it[1], it[2], it[3], it[4], it[6] ]
+            genotypes   : [ it[0], it[1], it[2], it[3], it[4], it[6], it[7] ]
             annotations : [ it[0], it[1], it[2], 'annotations', it[5] ]
         }
         | set { selected }
