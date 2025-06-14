@@ -21,7 +21,7 @@ echo "cohort,chrom,start,end,file,index,samples" > input/cohorts_input.csv
 echo "pheno1,,,,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.cases.txt" >> input/cohorts_input.csv
 echo "pheno2,chr2,,,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.cases.txt" >> input/cohorts_input.csv
 echo "pheno3,chr3,,,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.cases.txt" >> input/cohorts_input.csv
-echo "pheno4,chr3,1000,1000000,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.cases.txt" >> input/cohorts_input.csv
+echo "pheno4,chr3,1,20000000,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.cases.txt" >> input/cohorts_input.csv
 
 # Run nextflow
 module load Nextflow

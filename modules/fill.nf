@@ -1,5 +1,5 @@
 process FILL {
-    tag "${pheno}:${key}"
+    tag "${cohort}:${key}"
 
     label 'simple'
 

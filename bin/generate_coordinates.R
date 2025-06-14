@@ -13,7 +13,19 @@ output  <- args[7]
 
 # load genes
 if (genome == 'hg38') txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene::TxDb.Hsapiens.UCSC.hg38.knownGene
-# elseif (genome == 'hg37') txdb <- TxDb.Hsapiens.UCSC.hg37.knownGene::TxDb.Hsapiens.UCSC.hg37.knownGene
+if (genome == 'hg38') bsdb <- BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38
+
+if ( start != 'null' && end != 'null') {
+  q <- GenomicRanges::GRanges(
+    seqnames = chrom,
+    ranges = IRanges::IRanges(start = as.integer(start), end = as.integer(end))
+  )
+} else {
+  q <- GenomicRanges::GRanges(
+    seqnames = chrom,
+    ranges = IRanges::IRanges(start = 1, end = GenomeInfoDb::seqlengths(bsdb)[chrom])
+  )
+}
 
 if ( coding == 'true' ) {
   gene_coordinates <- GenomicFeatures::genes(
@@ -21,23 +33,11 @@ if ( coding == 'true' ) {
     filter = list(tx_chrom = chrom),
     columns = AnnotationDbi::columns(txdb)
   )
+  gene_coordinates <- IRanges::subsetByOverlaps(gene_coordinates, q)
 } else if ( coding == 'false' ) {
-  gene_coordinates <- GenomicFeatures::cds(
-    txdb,
-    filter = list(tx_chrom = chrom),
-    columns = AnnotationDbi::columns(txdb)
-  )
+  gene_coordinates <- q
 } else {
   stop("coding can be 'true' or 'false'.")
-}
-
-if ( start != 'null' && end != 'null') {
-  q <- GenomicRanges::GRanges(
-    seqnames = chrom,
-    ranges = IRanges::IRanges(start = as.integer(start), end = as.integer(end))
-  )
-  
-  gene_coordinates <- IRanges::subsetByOverlaps(gene_coordinates, q)
 }
 
 GenomeInfoDb::seqlevels(gene_coordinates) <- chrom
