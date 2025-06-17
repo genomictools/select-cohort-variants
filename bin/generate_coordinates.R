@@ -36,7 +36,7 @@ if ( coding == 'true' ) {
   )
   gene_coordinates <- IRanges::subsetByOverlaps(gene_coordinates, q)
 } else if ( coding == 'false' ) {
-  gene_coordinates <- GenomicRanges::tile(q, width = as.integer(chunk))
+  gene_coordinates <- unlist(GenomicRanges::tile(q, width = as.integer(chunk)))
 } else {
   stop("coding can be 'true' or 'false'.")
 }
