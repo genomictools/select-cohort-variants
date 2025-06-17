@@ -34,6 +34,7 @@ echo "pheno4,chr3,1,20000000,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/i
 
 # Run nextflow (example)
 # nextflow run genomictools/select-cohort-variants -r main \
+cd tests/
 nextflow run ../main.nf \
     --output_dir ./results/ \
     -profile local,test \
