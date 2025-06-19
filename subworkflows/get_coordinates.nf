@@ -35,7 +35,7 @@ workflow  {
         | splitCsv(header: true, sep: ',')
         | map { row -> [ cohort: row.cohort, chrom: row.chrom, start: row.start, end: row.end ] }
         | map { it -> 
-            chrom = it.chrom ?: (1..2).collect { "chr$it" } + ['chrX', 'chrY']
+            chrom = it.chrom ?: (1..22).collect { "chr$it" } + ['chrX', 'chrY']
             key   = (it.start && it.end) ? "${chrom}:${it.start}-${it.end}" : chrom
             [ it.cohort, key, chrom, it.start ?: null, it.end ?: null]
         }
