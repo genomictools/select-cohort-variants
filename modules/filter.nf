@@ -40,13 +40,14 @@ process FILTER {
     tabix ${cohort}.${key}.${category}.vcf.gz
 
     # Extract annotations
+    echo -e "variant\tgene\t\$(bcftools +split-vep -l ${cohort}.${key}.${category}.vcf.gz | cut -f 2 | tr '\n' '\t' | sed 's/\t\$//')" > ${cohort}.${key}.${category}.annotations.tsv
 	bcftools +split-vep \
 		-s worst \
 		-c Gene \
 		-f '%CHROM:%POS:%REF:%ALT\t%Gene\t%CSQ\n' \
 		-d -A tab \
 		${cohort}.${key}.${category}.vcf.gz \
-		> ${cohort}.${key}.${category}.annotations.tsv
+		>> ${cohort}.${key}.${category}.annotations.tsv
 
     # Count the number of samples and variants
     n_samples=\$(bcftools  query -l ${cohort}.${key}.${category}.vcf.gz | wc -l)

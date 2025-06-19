@@ -9,8 +9,7 @@ output_file <- args[3]
 # Load annotations
 annotations <- readr::read_tsv(
   annotations,
-  col_select = 1:2,
-  col_names = c('variant', 'gene')
+  col_select = 1:2
 )
 
 # Load rlist
