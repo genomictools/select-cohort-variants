@@ -21,9 +21,10 @@ rlist <- readr::read_delim(
 )
 
 # Tidy up rlist
-d <- dplyr::select(rlist, !where(is.double))
-d <- tidyr::pivot_longer(d, tidyr::starts_with('X'), values_to = 'samples')
-d <- dplyr::select(d, -name)
+d <- tidyr::unite(rlist, 'samples', dplyr::starts_with('X'), sep = ' ')
+d <- transform(d, samples = strsplit(samples, ' '))
+d <- tidyr::unnest(d, samples)
+d <- dplyr::filter(d, samples != '0')
 d <- dplyr::filter(d, !is.na(samples))
 
 # Join with annotations
