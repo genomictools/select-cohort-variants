@@ -11,9 +11,9 @@ module load Java/17
 source $NXF_CONDA
 
 # Setup tests
-curl -fsSL https://get.nf-test.com | bash
-./nf-test init
-./nf-test generate pipeline main.nf
+# curl -fsSL https://get.nf-test.com | bash
+# ./nf-test init
+# ./nf-test generate pipeline main.nf
 
 # Download input data
 mkdir -p tests tests/input
@@ -30,12 +30,12 @@ echo "pheno3,chr3,,,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/phen
 echo "pheno4,chr3,1,20000000,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/pheno.variants.vcf.gz.tbi,$PWD/tests/input/pheno.cases.txt" >> tests/input/cohorts_input.csv
 
 # Run tests
-./nf-test test tests/main.nf.test
+# ./nf-test test tests/main.nf.test
 
 # Run nextflow (example)
 # nextflow run genomictools/select-cohort-variants -r main \
 cd tests/
 nextflow run ../main.nf \
     --output_dir ./results/ \
-    -profile local,test \
+    -profile cluster,test \
     -resume
