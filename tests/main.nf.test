@@ -1,0 +1,56 @@
+nextflow_pipeline {
+
+    name "Test Workflow main.nf"
+    script "main.nf"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                cohorts    = "${projectDir}/tests/input/cohorts_input.csv"
+                output_dir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+        }
+
+    }
+
+    test("Should run without failures, when coding is true") {
+
+        when {
+            params {
+                cohorts    = "${projectDir}/tests/input/cohorts_input.csv"
+                output_dir = "results"
+                coding     = true
+            }
+        }
+
+        then {
+            assert workflow.success
+        }
+
+    }
+
+    test("Should producess correct summaries") {
+
+        when {
+            params {
+                cohorts    = "${projectDir}/tests/input/cohorts_input.csv"
+                output_dir = "results"
+            }
+        }
+
+        then {
+            assert file("$launchDir/results/summary/pheno1.Damaging.aggregate.tsv").exists()
+            assert file("$launchDir/results/summary/pheno1.Damaging.annotations.tsv").exists()
+            assert file("$launchDir/results/summary/pheno1.Damaging.frqx.tsv").exists()
+            assert file("$launchDir/results/summary/pheno1.Damaging.rlist.tsv").exists()
+            assert file("$launchDir/results/summary/pheno1.Damaging.snplist.tsv").exists()
+        }
+
+    }
+
+}
