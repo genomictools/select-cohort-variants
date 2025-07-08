@@ -1,0 +1,15 @@
+[submodule "bin"]
+	path = bin
+	url = git@github.com:genomictools/bin.git
+	branch = select-cohort-variants
+[submodule "modules"]
+	path = modules
+	url = git@github.com:genomictools/modules.git
+	branch = select-cohort-variants
+[submodule "subworkflows"]
+	path = subworkflows
+	url = git@github.com:genomictools/subworkflows.git
+	branch = select-cohort-variants
+[submodule "conf"]
+	path = conf
+	url = git@github.com:genomictools/conf.git
