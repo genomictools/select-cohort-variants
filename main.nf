@@ -18,6 +18,11 @@ cohorts_ch = Channel.fromPath(params.cohorts)
     ] }
     | unique
 
+phenotypes_ch = Channel.fromPath(params.cohorts)
+    | splitCsv(header: true, sep: ',')
+    | map { row -> [ row.cohort, file(row.phenotype) ] }
+    | unique
+
 genes_coords_ch = Channel.fromPath(params.cohorts)
     | splitCsv(header: true, sep: ',')
     | map { row -> [ cohort: row.cohort, chrom: row.chrom, start: row.start, end: row.end ] }
@@ -38,7 +43,7 @@ workflow  {
     coordinates = get_coordinates( genes_coords_ch, params.genome, params.style )
     cohorts = get_cohort( cohorts_ch, coordinates.bed )
     variants = select_variants( cohorts.variants, coordinates.chunks )
-    summary = summarize_genes( variants.genotypes, variants.annotations )
+    summary = summarize_genes( variants.genotypes, phenotypes_ch, variants.annotations )
 
     summary
         | collectFile (

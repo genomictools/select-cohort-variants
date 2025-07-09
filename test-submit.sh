@@ -21,13 +21,14 @@ URL="https://figshare.com/ndownloader/files"
 wget -c $URL/50487621 -O tests/input/pheno.variants.vcf.gz
 wget -c $URL/50487624 -O tests/input/pheno.variants.vcf.gz.tbi
 wget -c $URL/50385591 -O tests/input/pheno.cases.txt
+wget -c $URL/56088563 -O tests/input/pheno.phenotypes.txt
 
 # Create input file
-echo "cohort,chrom,start,end,file,index,samples" > tests/input/cohorts_input.csv
-echo "pheno1,,,,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/pheno.variants.vcf.gz.tbi,$PWD/tests/input/pheno.cases.txt" >> tests/input/cohorts_input.csv
-echo "pheno2,chr2,,,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/pheno.variants.vcf.gz.tbi,$PWD/tests/input/pheno.cases.txt" >> tests/input/cohorts_input.csv
-echo "pheno3,chr3,,,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/pheno.variants.vcf.gz.tbi,$PWD/tests/input/pheno.cases.txt" >> tests/input/cohorts_input.csv
-echo "pheno4,chr3,1,20000000,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/pheno.variants.vcf.gz.tbi,$PWD/tests/input/pheno.cases.txt" >> tests/input/cohorts_input.csv
+echo "cohort,chrom,start,end,file,index,samples,phenotype" > tests/input/cohorts_input.csv
+echo "pheno1,chr1,,,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/pheno.variants.vcf.gz.tbi,$PWD/tests/input/pheno.cases.txt,$PWD/tests/input/pheno.phenotypes.txt" >> tests/input/cohorts_input.csv
+echo "pheno2,chr2,,,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/pheno.variants.vcf.gz.tbi,$PWD/tests/input/pheno.cases.txt,$PWD/tests/input/pheno.phenotypes.txt" >> tests/input/cohorts_input.csv
+echo "pheno3,chr3,,,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/pheno.variants.vcf.gz.tbi,$PWD/tests/input/pheno.cases.txt,$PWD/tests/input/pheno.phenotypes.txt" >> tests/input/cohorts_input.csv
+echo "pheno4,chr3,1,20000000,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/pheno.variants.vcf.gz.tbi,$PWD/tests/input/pheno.cases.txt,$PWD/tests/input/pheno.phenotypes.txt" >> tests/input/cohorts_input.csv
 
 # Run tests
 # ./nf-test test tests/main.nf.test
