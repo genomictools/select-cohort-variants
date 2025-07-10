@@ -46,6 +46,15 @@ workflow  {
     summary = summarize_genes( variants.genotypes, phenotypes_ch, variants.annotations )
 
     summary
+        | filter { it[3] == 'snplist' || it[3] == 'rlist'}
+        // | take (1) | view
+        | collectFile (
+            storeDir: "${params.output_dir}/summary",
+        )
+        { it -> [ "${it[0]}.${it[2]}.${it[3]}.tsv", it[4] ] }
+
+    summary
+        | filter { it[3] != 'snplist' && it[3] != 'rlist'}
         | collectFile (
             keepHeader: true,
             storeDir: "${params.output_dir}/summary",
