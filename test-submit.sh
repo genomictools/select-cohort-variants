@@ -15,20 +15,15 @@ source $NXF_CONDA
 # ./nf-test init
 # ./nf-test generate pipeline main.nf
 
-# Download input data
+# # Download input data
 mkdir -p tests tests/input
-URL="https://figshare.com/ndownloader/files"
-wget -c $URL/50487621 -O tests/input/pheno.variants.vcf.gz
-wget -c $URL/50487624 -O tests/input/pheno.variants.vcf.gz.tbi
-wget -c $URL/50385591 -O tests/input/pheno.cases.txt
-wget -c $URL/56088563 -O tests/input/pheno.phenotypes.txt
 
-# Create input file
-echo "cohort,chrom,start,end,file,index,samples,phenotype" > tests/input/cohorts_input.csv
-echo "pheno1,chr1,,,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/pheno.variants.vcf.gz.tbi,$PWD/tests/input/pheno.cases.txt,$PWD/tests/input/pheno.phenotypes.txt" >> tests/input/cohorts_input.csv
-echo "pheno2,chr2,,,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/pheno.variants.vcf.gz.tbi,$PWD/tests/input/pheno.cases.txt,$PWD/tests/input/pheno.phenotypes.txt" >> tests/input/cohorts_input.csv
-echo "pheno3,chr3,,,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/pheno.variants.vcf.gz.tbi,$PWD/tests/input/pheno.cases.txt,$PWD/tests/input/pheno.phenotypes.txt" >> tests/input/cohorts_input.csv
-echo "pheno4,chr3,1,20000000,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/input/pheno.variants.vcf.gz.tbi,$PWD/tests/input/pheno.cases.txt,$PWD/tests/input/pheno.phenotypes.txt" >> tests/input/cohorts_input.csv
+URL="https://raw.githubusercontent.com/genomictools/test-datasets/refs/heads/select-cohort-variants"
+wget -c $URL/pheno.variants.vcf.gz -O tests/input/pheno.variants.vcf.gz
+wget -c $URL/pheno.variants.vcf.gz.tbi -O tests/input/pheno.variants.vcf.gz.tbi
+wget -c $URL/pheno.cases.txt -O tests/input/pheno.cases.txt
+wget -c $URL/pheno.phenotypes.txt -O tests/input/pheno.phenotypes.txt
+wget -c $URL/cohorts_input.csv -O tests/input/cohorts_input.csv
 
 # Run tests
 # ./nf-test test tests/main.nf.test
@@ -38,5 +33,5 @@ echo "pheno4,chr3,1,20000000,$PWD/tests/input/pheno.variants.vcf.gz,$PWD/tests/i
 cd tests/
 nextflow run ../main.nf \
     --output_dir ./results/ \
-    -profile cluster,test \
+    -profile local,test \
     -resume
