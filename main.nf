@@ -7,6 +7,7 @@ include { get_coordinates } from './subworkflows/get_coordinates.nf'
 include { get_cohort }      from './subworkflows/get_cohort.nf'
 include { select_variants } from './subworkflows/select_variants.nf'
 include { summarize_cases } from './subworkflows/summarize_cases.nf'
+include { summarize_controls } from './subworkflows/summarize_controls.nf'
 
 // Define input channels
 cohorts_ch = Channel.fromPath(params.cohorts)
@@ -62,5 +63,10 @@ workflow  {
             storeDir: "${params.output_dir}/summary",
         )
         { it -> [ "${it[0]}.${it[2]}.${it[3]}.tsv", it[4] ] }
+    } else if ( params.cohort_type == 'controls' ) {
+    summary = summarize_controls( variants.genotypes, variants.annotations )
+    summary | view
+    } else {
+        error "Invalid cohort type: ${params.cohort_type}. Expected 'cases' or 'controls'."
     }
 }
