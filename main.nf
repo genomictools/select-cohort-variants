@@ -26,15 +26,16 @@ phenotypes_ch = Channel.fromPath(params.cohorts)
 
 genes_coords_ch = Channel.fromPath(params.cohorts)
     | splitCsv(header: true, sep: ',')
-    | map { row -> [ cohort: row.cohort, chrom: row.chrom, start: row.start, end: row.end ] }
+    | map { row -> [ cohort: row.cohort, chrom: row.chrom, start: row.start, end: row.end, genelist: row.genelist ] }
     | map { it -> 
         chrom = it.chrom ?: (1..22).collect { "chr$it" } + ['chrX', 'chrY']
         key   = (it.start && it.end) ? "${chrom}:${it.start}-${it.end}" : chrom
-        [ it.cohort, key, chrom, it.start ?: null, it.end ?: null]
+
+        [ it.cohort, key, chrom, it.start ?: null, it.end ?: null, it.genelist ? file(it.genelist) : null ]
     }
     | transpose
     | unique
-    | groupTuple(by: [1,2,3,4])
+    | groupTuple(by: [1,2,3,4,5])
 
 category_ch = Channel.of(params.categories.split(','))
 variable_ch = Channel.of( 'rlist', 'snplist', 'frqx', 'frq.strat' )

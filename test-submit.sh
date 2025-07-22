@@ -24,6 +24,7 @@ wget -c $URL/pheno.variants.vcf.gz.tbi -O tests/input/pheno.variants.vcf.gz.tbi
 wget -c $URL/pheno.cases.txt -O tests/input/pheno.cases.txt
 wget -c $URL/pheno.phenotypes.txt -O tests/input/pheno.phenotypes.txt
 wget -c $URL/cohorts_input.csv -O tests/input/cohorts_input.csv
+wget -c $URL/genelist.txt -O tests/input/genelist.txt
 
 # Run tests
 # ./nf-test test tests/main.nf.test
@@ -33,5 +34,5 @@ wget -c $URL/cohorts_input.csv -O tests/input/cohorts_input.csv
 cd tests/
 nextflow run ../main.nf \
     --output_dir ./results/ \
-    -profile local,test \
+    -profile local,test_list \
     -resume
