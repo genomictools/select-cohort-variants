@@ -38,7 +38,10 @@ genes_coords_ch = Channel.fromPath(params.cohorts)
     | groupTuple(by: [1,2,3,4,5])
 
 category_ch = Channel.of(params.categories.split(','))
-variable_ch = Channel.of( 'rlist', 'snplist', 'frqx', 'frq.strat' )
+// 'Pathogenic,Damaging,Splicing,High,PTV,Stop,Rare'
+
+variable_ch = Channel.of(params.variables.split(','))
+// 'rlist,snplist,frqx,frq.strat,frq.cc,frq.counts' 
 
 // Run the main workflow
 workflow  {
