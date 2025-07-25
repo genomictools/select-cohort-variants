@@ -19,12 +19,12 @@ source $NXF_CONDA
 mkdir -p tests tests/input
 
 URL="https://raw.githubusercontent.com/genomictools/test-datasets/refs/heads/select-cohort-variants"
+wget -c $URL/cohorts_input.csv -O tests/input/cohorts_input.csv
 wget -c $URL/pheno.variants.vcf.gz -O tests/input/pheno.variants.vcf.gz
 wget -c $URL/pheno.variants.vcf.gz.tbi -O tests/input/pheno.variants.vcf.gz.tbi
-wget -c $URL/pheno.cases.txt -O tests/input/pheno.cases.txt
-wget -c $URL/pheno.phenotypes.txt -O tests/input/pheno.phenotypes.txt
-wget -c $URL/cohorts_input.csv -O tests/input/cohorts_input.csv
+wget -c $URL/pheno.ped -O tests/input/pheno.ped
 wget -c $URL/genelist.txt -O tests/input/genelist.txt
+touch tests/input/empty.genelist.txt
 
 # Run tests
 # ./nf-test test tests/main.nf.test

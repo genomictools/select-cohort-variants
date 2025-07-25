@@ -15,13 +15,13 @@ cohorts_ch = Channel.fromPath(params.cohorts)
     | map { row -> [
         row.cohort,
         file(row.file), file(row.index),
-        file(row.samples)
+        file(row.pedigree)
     ] }
     | unique
 
-phenotypes_ch = Channel.fromPath(params.cohorts)
+pedigree_ch = Channel.fromPath(params.cohorts)
     | splitCsv(header: true, sep: ',')
-    | map { row -> [ row.cohort, file(row.phenotype) ] }
+    | map { row -> [ row.cohort, file(row.pedigree) ] }
     | unique
 
 genes_coords_ch = Channel.fromPath(params.cohorts)
@@ -47,7 +47,7 @@ workflow  {
     variants = select_variants( cohorts.variants, coordinates.chunks )
 
     if ( params.cohort_type == 'cases' ) {
-    summary = summarize_cases( variants.genotypes, phenotypes_ch, variants.annotations )
+    summary = summarize_cases( variants.genotypes, pedigree_ch, variants.annotations )
 
     summary
         | filter { it[3] == 'snplist' || it[3] == 'rlist'}
