@@ -24,7 +24,7 @@ wget -c $URL/pheno.variants.vcf.gz -O tests/input/pheno.variants.vcf.gz
 wget -c $URL/pheno.variants.vcf.gz.tbi -O tests/input/pheno.variants.vcf.gz.tbi
 wget -c $URL/pheno.ped -O tests/input/pheno.ped
 wget -c $URL/genelist.txt -O tests/input/genelist.txt
-touch tests/input/empty.genelist.txt
+# touch tests/input/empty.genelist.txt
 
 # Run tests
 # ./nf-test test tests/main.nf.test
@@ -34,5 +34,5 @@ touch tests/input/empty.genelist.txt
 cd tests/
 nextflow run ../main.nf \
     --output_dir ./results/ \
-    -profile local,test_list \
+    -profile cluster,test_list \
     -resume

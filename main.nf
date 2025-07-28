@@ -69,7 +69,6 @@ workflow  {
         { it -> [ "${it[0]}.${it[2]}.${it[3]}.tsv", it[4] ] }
     } else if ( params.cohort_type == 'controls' ) {
     summary = summarize_controls( variants.genotypes, variants.annotations )
-    summary | view
     } else {
         error "Invalid cohort type: ${params.cohort_type}. Expected 'cases' or 'controls'."
     }
