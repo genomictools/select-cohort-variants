@@ -37,6 +37,17 @@ genes_coords_ch = Channel.fromPath(params.cohorts)
     | unique
     | groupTuple(by: [1,2,3,4,5])
 
+annotations_ch = Channel.fromPath(params.cohorts)
+    | splitCsv(header: true, sep: ',')
+    | map { row -> [ cohort: row.cohort, chrom: row.chrom, start: row.start, end: row.end, file: file(row.annot_file), index: file(row.annot_index) ] }
+    | map { it -> 
+        chrom = it.chrom ?: (1..2).collect { "chr$it" } + ['chrX', 'chrY']
+        key   = (it.start && it.end) ? "${chrom}:${it.start}-${it.end}" : chrom
+        [ it.cohort, key, it.file, it.index ]
+    }
+    | transpose
+    | unique
+
 category_ch = Channel.of(params.categories.split(','))
 // 'Pathogenic,Damaging,Splicing,High,PTV,Stop,Rare'
 
@@ -46,7 +57,7 @@ variable_ch = Channel.of(params.variables.split(','))
 // Run the main workflow
 workflow  {
     coordinates = get_coordinates( genes_coords_ch, params.genome, params.style )
-    cohorts = get_cohort( cohorts_ch, coordinates.bed )
+    cohorts = get_cohort( cohorts_ch, coordinates.bed, annotations_ch )
     variants = select_variants( cohorts.variants, coordinates.chunks )
 
     if ( params.cohort_type == 'cases' ) {
