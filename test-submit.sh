@@ -34,5 +34,5 @@ wget -c $URL/genelist.txt -O tests/input/genelist.txt
 cd tests/
 nextflow run ../main.nf \
     --output_dir ./results/ \
-    -profile cluster,test_list \
+    -profile cluster,test_unfiltered \
     -resume
