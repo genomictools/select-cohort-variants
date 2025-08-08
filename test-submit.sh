@@ -20,11 +20,27 @@ mkdir -p tests tests/input
 
 URL="https://raw.githubusercontent.com/genomictools/test-datasets/refs/heads/select-cohort-variants"
 wget -c $URL/cohorts_input.csv -O tests/input/cohorts_input.csv
+wget -c $URL/cohorts_input_annotate.csv -O tests/input/cohorts_input_annotate.csv
+
+wget -c $URL/pheno.ped -O tests/input/pheno.ped
+wget -c $URL/FAM01.ped -O tests/input/FAM01.ped
+wget -c $URL/FAM02.ped -O tests/input/FAM02.ped
+wget -c $URL/FAM03.ped -O tests/input/FAM03.ped
+
+wget -c $URL/empty.genelist.txt -O tests/input/empty.genelist.txt
+wget -c $URL/genelist.txt -O tests/input/genelist.txt
+
+
 wget -c $URL/pheno.variants.vcf.gz -O tests/input/pheno.variants.vcf.gz
 wget -c $URL/pheno.variants.vcf.gz.tbi -O tests/input/pheno.variants.vcf.gz.tbi
-wget -c $URL/pheno.ped -O tests/input/pheno.ped
-wget -c $URL/genelist.txt -O tests/input/genelist.txt
-# touch tests/input/empty.genelist.txt
+
+wget -c $URL/families.variants.vcf.gz -O tests/input/families.variants.vcf.gz
+wget -c $URL/families.variants.vcf.gz.tbi -O tests/input/families.variants.vcf.gz.tbi
+
+wget -c $URL/pheno.variants.anno.vcf.gz -O tests/input/pheno.variants.anno.vcf.gz
+wget -c $URL/pheno.variants.anno.vcf.gz.tbi -O tests/input/pheno.variants.anno.vcf.gz.tbi
+wget -c $URL/pheno.variants.novep.vcf.gz -O tests/input/pheno.variants.novep.vcf.gz
+wget -c $URL/pheno.variants.novep.vcf.gz.tbi -O tests/input/pheno.variants.novep.vcf.gz.tbi
 
 # Run tests
 # ./nf-test test tests/main.nf.test
