@@ -46,7 +46,7 @@ variable_ch = Channel.of(params.variables.split(','))
 // Run the main workflow
 workflow  {
     coordinates = get_coordinates( genes_coords_ch, params.genome, params.style )
-    cohorts = get_cohort( cohorts_ch, coordinates.bed )
+    cohorts = get_cohort( cohorts_ch, coordinates.bed ) // subset by chunks! not bed
     variants = select_variants( cohorts.variants, coordinates.chunks )
 
     if ( params.cohort_type == 'cases' ) {
