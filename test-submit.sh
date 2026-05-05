@@ -25,5 +25,5 @@ cd tests/
 
 nextflow run ../main.nf \
     --output_dir ./results/ \
-    -profile local,test_annotate \
+    -profile local,test \
     -resume

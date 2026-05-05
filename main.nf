@@ -37,16 +37,18 @@ genes_coords_ch = Channel.fromPath(params.cohorts)
     | unique
     | groupTuple(by: [1,2,3,4,5])
 
-annotations_ch = Channel.fromPath(params.cohorts)
-    | splitCsv(header: true, sep: ',')
-    | map { row -> [ cohort: row.cohort, chrom: row.chrom, start: row.start, end: row.end, file: file(row.annot_file), index: file(row.annot_index) ] }
-    | map { it -> 
-        chrom = it.chrom ?: (1..2).collect { "chr$it" } + ['chrX', 'chrY']
-        key   = (it.start && it.end) ? "${chrom}:${it.start}-${it.end}" : chrom
-        [ it.cohort, key, it.file, it.index ]
-    }
-    | transpose
-    | unique
+if ( params.annotate ) {
+    annotations_ch = Channel.fromPath(params.cohorts)
+        | splitCsv(header: true, sep: ',')
+        | map { row -> [ cohort: row.cohort, chrom: row.chrom, start: row.start, end: row.end, file: file(row.annot_file), index: file(row.annot_index) ] }
+        | map { it -> 
+            chrom = it.chrom ?: (1..22).collect { "chr$it" } + ['chrX', 'chrY']
+            key   = (it.start && it.end) ? "${chrom}:${it.start}-${it.end}" : chrom
+            [ it.cohort, key, it.file, it.index ]
+        }
+} else {
+    annotations_ch = Channel.empty()
+}
 
 category_ch = Channel.of(params.categories.split(','))
 // 'Pathogenic,Damaging,Splicing,High,PTV,Stop,Rare'
