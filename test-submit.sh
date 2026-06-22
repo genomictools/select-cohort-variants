@@ -25,5 +25,6 @@ cd tests/
 
 nextflow run ../main.nf \
     --output_dir ./results/ \
-    -profile local,test \
+    -profile local,test_minimal \
+    -params-file ../test-params.json \
     -resume
