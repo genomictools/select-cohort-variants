@@ -1,0 +1,4 @@
+cohort,chrom,start,end,genelist,file,index,pedigree
+pheno1,chr1,,,test-datasets/genelist.txt,test-datasets/pheno.variants.vcf.gz,test-datasets/pheno.variants.vcf.gz.tbi,test-datasets/pheno.ped
+pheno2,chr2,,,test-datasets/genelist.txt,test-datasets/pheno.variants.vcf.gz,test-datasets/pheno.variants.vcf.gz.tbi,test-datasets/pheno.ped
+pheno3,chr3,1,20000000,test-datasets/genelist.txt,test-datasets/pheno.variants.vcf.gz,test-datasets/pheno.variants.vcf.gz.tbi,test-datasets/pheno.ped
