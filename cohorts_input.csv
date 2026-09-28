@@ -1,0 +1,11 @@
+cohort,chrom,start,end,genelist,file,index,pedigree
+pheno1,chr1,,,input/genelist.txt,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.ped
+pheno2,chr1,,,input/genelist.txt,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.ped
+pheno2,chr2,,,input/genelist.txt,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.ped
+pheno3,chr3,,,input/genelist.txt,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.ped
+pheno4,chr3,1,20000000,input/genelist.txt,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.ped
+pheno5,chr1,,,input/genelist.txt,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.ped
+pheno5,chr1,,,input/genelist.txt,input/pheno.variants.vcf.gz,input/pheno.variants.vcf.gz.tbi,input/pheno.ped
+FAM01,,,,input/empty.genelist.txt,input/families.variants.vcf.gz,input/families.variants.vcf.gz.tbi,input/FAM01.ped
+FAM02,,,,input/empty.genelist.txt,input/families.variants.vcf.gz,input/families.variants.vcf.gz.tbi,input/FAM02.ped
+FAM03,,,,input/empty.genelist.txt,input/families.variants.vcf.gz,input/families.variants.vcf.gz.tbi,input/FAM03.ped

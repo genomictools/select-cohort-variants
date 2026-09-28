@@ -1,0 +1,2 @@
+cohort,chrom,start,end,genelist,file,index,pedigree,annot_file,annot_index
+pheno1,chr1,,,input/genelist.txt,input/pheno.variants.novep.vcf.gz,input/pheno.variants.novep.vcf.gz.tbi,input/pheno.ped,input/pheno.variants.anno.vcf.gz,input/pheno.variants.anno.vcf.gz.tbi
